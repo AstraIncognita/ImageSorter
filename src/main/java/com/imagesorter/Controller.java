@@ -63,6 +63,9 @@ public class Controller implements Initializable {
     @FXML
     private Pane resizeablePane;
 
+    @FXML
+    private VBox imageInfoBox;
+
     public void startStop()
     {
         start();
@@ -70,19 +73,34 @@ public class Controller implements Initializable {
 
     void start()
     {
-        if (inputDirectory.exists() && inputDirectory.isDirectory()) {
+        if (inputDirectory != null && inputDirectory.exists() && inputDirectory.isDirectory()) {
             inputFileList = findAllImages();
             if (inputFileList.size() > 0)
             {
+                imageInfoBox.setDisable(false);
                 showNextImage();
                 currentState = State.RUNNING;
             }
         }
     }
 
-    private void showNextImage() {
-        imageView.setImage(new Image(inputFileList.get(0).getAbsolutePath()));
-        imageNameField.setText(inputFileList.get(0).getName());
+    public void showNextImage() {
+        switch (currentState) {
+            case RUNNING:
+                inputFileList.remove(0);
+                if (inputFileList.size() <= 0) {
+                    imageView.setImage(null);
+                    imageNameField.setText("");
+                    currentState = State.FINISHED;
+                    return;
+                }
+                imageView.setImage(new Image(inputFileList.get(0).getAbsolutePath()));
+                String fileName = inputFileList.get(0).getName();
+                imageNameField.setText(fileName.substring(0, fileName.lastIndexOf(".")));
+                break;
+            case FINISHED:
+                break;
+        }
     }
 
     private LinkedList<File> findAllImages() {
@@ -90,18 +108,15 @@ public class Controller implements Initializable {
         String[] extensions = {"jpg", "jpeg", "bmp", "png"};
 
 
-        FilenameFilter filter = new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                for(String extension : extensions)
+        FilenameFilter filter = (dir, name) -> {
+            for(String extension : extensions)
+            {
+                if (name.endsWith("."+extension))
                 {
-                    if (name.endsWith("."+extension))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
-                return false;
             }
+            return false;
         };
 
         LinkedList<File> imageList;
@@ -184,20 +199,15 @@ public class Controller implements Initializable {
                 }
                 break;
             case RUNNING:
-                String newPath = outputDirectoryList.get(index).getAbsolutePath() + "/" + imageNameField.getText();
+                String fileName = inputFileList.get(0).getName();
+                String newPath =
+                        outputDirectoryList.get(index).getAbsolutePath()
+                        + "/"
+                        + imageNameField.getText()
+                        + fileName.substring(fileName.lastIndexOf('.'));
                 if (inputFileList.get(0).renameTo(new File(newPath)))
                 {
-                    inputFileList.remove(0);
-                    if (inputFileList.size() <= 0)
-                    {
-                        imageView.setImage(null);
-                        imageNameField.setText("");
-                        currentState = State.FINISHED;
-                        return;
-                    }
-                    imageView.setImage(new Image(inputFileList.get(0).getAbsolutePath()));
-                    imageNameField.setText(inputFileList.get(0).getName());
-
+                    showNextImage();
                 }
                 else
                 {

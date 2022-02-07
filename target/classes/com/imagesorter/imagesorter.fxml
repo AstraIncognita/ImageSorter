@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="450.0" minWidth="750.0" prefHeight="450.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.imagesorter.Controller">
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="500.0" minWidth="750.0" prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.imagesorter.Controller">
   <columnConstraints>
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="450.0" percentWidth="60.0" prefWidth="450.0" />
     <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="300.0" percentWidth="40.0" prefWidth="300.0" />
@@ -25,11 +25,12 @@
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="300.0" prefWidth="300.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="10.0" percentHeight="25.0" prefHeight="10.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" percentHeight="75.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="90.0" prefHeight="90.0" vgrow="NEVER" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="80.0" minHeight="10.0" prefHeight="30.0" valignment="BOTTOM" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0" GridPane.halignment="CENTER">
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.halignment="CENTER">
                <children>
                   <Label text="Input Folder Path" />
                   <GridPane>
@@ -45,23 +46,34 @@
                         <Button fx:id="inputDirectoryButton" mnemonicParsing="false" onAction="#chooseInputDirectory" prefHeight="26.0" prefWidth="75.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" />
                      </children>
                   </GridPane>
-                  <Label text="Image Name" />
-                  <TextField fx:id="imageNameField" />
                   <Button fx:id="startStopButton" mnemonicParsing="false" onAction="#startStop" prefHeight="26.0" prefWidth="700.0" text="Start" VBox.vgrow="NEVER" />
                </children>
             </VBox>
-            <VBox fx:id="outputDirectoryBox" prefHeight="200.0" prefWidth="100.0" GridPane.rowIndex="1">
+            <VBox fx:id="outputDirectoryBox" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="1">
                <children>
-                  <Label text="Output Folders:" />
+                  <Label text="Output:" />
                </children>
                <GridPane.margin>
                   <Insets top="5.0" />
                </GridPane.margin>
             </VBox>
+            <VBox fx:id="imageInfoBox" disable="true" prefHeight="100.0" prefWidth="300.0" spacing="5.0" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
+               <children>
+                  <Label text="Image Info" />
+                  <TextField fx:id="imageNameField" />
+                  <Button mnemonicParsing="false" onAction="#showNextImage" prefHeight="26.0" prefWidth="700.0" text="Skip this image" />
+               </children>
+            </VBox>
          </children>
       </GridPane>
-      <Pane fx:id="resizeablePane" prefHeight="200.0" prefWidth="200.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-      <ImageView fx:id="imageView" fitHeight="450.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="LEFT" GridPane.valignment="TOP" />
+      <Pane fx:id="resizeablePane" prefHeight="200.0" prefWidth="200.0" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS">
+         <GridPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </GridPane.margin></Pane>
+      <ImageView fx:id="imageView" fitHeight="450.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true" GridPane.halignment="LEFT" GridPane.valignment="TOP">
+         <GridPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </GridPane.margin></ImageView>
    </children>
    <padding>
       <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
