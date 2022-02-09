@@ -32,7 +32,7 @@
          <children>
             <VBox prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.halignment="CENTER">
                <children>
-                  <Label text="Input Folder Path" />
+                  <Label text="Input folder:" />
                   <GridPane>
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" percentWidth="90.0" prefWidth="266.0" />
@@ -43,10 +43,10 @@
                     </rowConstraints>
                      <children>
                         <TextField fx:id="inputDirectoryField" editable="false" />
-                        <Button fx:id="inputDirectoryButton" mnemonicParsing="false" onAction="#chooseInputDirectory" prefHeight="26.0" prefWidth="75.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" />
+                        <Button fx:id="inputDirectoryButton" mnemonicParsing="false" onAction="#inputDirectoryButton" prefHeight="26.0" prefWidth="75.0" text="..." GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.hgrow="ALWAYS" />
                      </children>
                   </GridPane>
-                  <Button fx:id="startStopButton" mnemonicParsing="false" onAction="#startStop" prefHeight="26.0" prefWidth="700.0" text="Start" VBox.vgrow="NEVER" />
+                  <Button fx:id="startStopButton" mnemonicParsing="false" onAction="#startStopButton" prefHeight="26.0" prefWidth="700.0" text="Start" VBox.vgrow="NEVER" />
                </children>
             </VBox>
             <VBox fx:id="outputDirectoryBox" prefHeight="200.0" prefWidth="100.0" spacing="5.0" GridPane.rowIndex="1">
@@ -59,9 +59,9 @@
             </VBox>
             <VBox fx:id="imageInfoBox" disable="true" prefHeight="100.0" prefWidth="300.0" spacing="5.0" GridPane.rowIndex="2" GridPane.valignment="BOTTOM">
                <children>
-                  <Label text="Image Info" />
+                  <Label text="Image name:" />
                   <TextField fx:id="imageNameField" />
-                  <Button mnemonicParsing="false" onAction="#showNextImage" prefHeight="26.0" prefWidth="700.0" text="Skip this image" />
+                  <Button mnemonicParsing="false" onAction="#skipImageButton" prefHeight="26.0" prefWidth="700.0" text="Skip" />
                </children>
             </VBox>
          </children>
