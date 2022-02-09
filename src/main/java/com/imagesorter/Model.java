@@ -76,10 +76,6 @@ public class Model {
         if (imageArray != null) {
             fileList = new LinkedList<>(List.of(imageArray));
         }
-        else
-        {
-            fileList = new LinkedList<>();
-        }
     }
 
     void removeInvalidFiles()

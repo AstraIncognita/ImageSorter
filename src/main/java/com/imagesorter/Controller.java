@@ -56,22 +56,21 @@ public class Controller implements Initializable {
         {
             case WAITING ->
             {
-                if (model.isInputDirectoryValid() && model.outputDirectoriesCount() > 0)
-                {
-                    model.generateFileList();
-                    if (model.hasFiles())
-                    {
-                        toRunningState();
-                    }
-                    else
-                    {
-                        showAlert("Chosen input directory is empty.");
-                    }
-                }
-                else
+                if (!model.isInputDirectoryValid() || model.outputDirectoriesCount() == 0)
                 {
                     showAlert("Some directories are invalid.");
+                    return;
                 }
+
+                model.generateFileList();
+
+                if (!model.hasFiles())
+                {
+                    showAlert("Chosen input directory is empty.");
+                    return;
+                }
+
+                toRunningState();
             }
             case RUNNING ->
             {
@@ -155,10 +154,10 @@ public class Controller implements Initializable {
     private void toWaitingState()
     {
         imageView.setImage(null);
-        imageNameField.setText("");
-        imageInfoBox.setDisable(true);
+
         inputDirectoryButton.setDisable(false);
         startStopButton.setText("Start");
+
         outputButtonList.get(outputButtonList.size() - 1).setDisable(false);
         outputFieldsList.get(outputFieldsList.size() - 1).setDisable(false);
         for (Button button : outputButtonList)
@@ -166,22 +165,54 @@ public class Controller implements Initializable {
             button.setText("X");
         }
         outputButtonList.get(outputButtonList.size() - 1).setText("...");
+
+        imageNameField.setText("");
+        imageInfoBox.setDisable(true);
+
         currentState = State.WAITING;
     }
 
     private void toRunningState()
     {
-        imageInfoBox.setDisable(false);
+        tryShowImage();
+
         inputDirectoryButton.setDisable(true);
         startStopButton.setText("Stop");
-        tryShowImage();
+
         outputButtonList.get(outputButtonList.size() - 1).setDisable(true);
         outputFieldsList.get(outputFieldsList.size() - 1).setDisable(true);
         for (Button button : outputButtonList)
         {
             button.setText("<-");
         }
+
+        imageInfoBox.setDisable(false);
+
         currentState = State.RUNNING;
+    }
+
+    private void tryShowImage()
+    {
+        if (!model.hasFiles())
+        {
+            toWaitingState();
+            showAlert("Image sorting was successfully finished.");
+            return;
+        }
+
+        File currentFile = model.getCurrentFile();
+        if (currentFile == null)
+        {
+            showAlert("Some of the files were unexpectedly removed while sorting.");
+            model.removeInvalidFiles();
+            tryShowImage();
+        }
+        else
+        {
+            imageView.setImage(new Image(currentFile.getAbsolutePath()));
+            String fileName = currentFile.getName();
+            imageNameField.setText(fileName.substring(0, fileName.lastIndexOf(".")));
+        }
     }
 
     private EventHandler<ActionEvent> createOutputButtonHandler(int index)
@@ -201,14 +232,15 @@ public class Controller implements Initializable {
     private void generateOutputDirectoryUI()
     {
         GridPane gridPane = new GridPane();
+
         Button button = new Button("...");
         button.setPrefWidth(75);
         button.setOnAction(createOutputButtonHandler(outputButtonList.size()));
+
         TextField textField = new TextField();
         textField.setEditable(false);
 
         gridPane.addRow(0, textField, button);
-
         ColumnConstraints col0 = new ColumnConstraints();
         col0.setPercentWidth(90);
         ColumnConstraints col1 = new ColumnConstraints();
@@ -227,31 +259,6 @@ public class Controller implements Initializable {
         outputGridList.remove(index);
         outputFieldsList.remove(index);
         outputButtonList.remove(index);
-    }
-
-    private void tryShowImage()
-    {
-        if (!model.hasFiles())
-        {
-            toWaitingState();
-            showAlert("Image sorting was successfully finished.");
-        }
-        else
-        {
-            File currentFile = model.getCurrentFile();
-            if (currentFile != null)
-            {
-                imageView.setImage(new Image(currentFile.getAbsolutePath()));
-                String fileName = currentFile.getName();
-                imageNameField.setText(fileName.substring(0, fileName.lastIndexOf(".")));
-            }
-            else
-            {
-                showAlert("Some of the files were unexpectedly removed while sorting.");
-                model.removeInvalidFiles();
-                tryShowImage();
-            }
-        }
     }
 
     private void showAlert(String message)
